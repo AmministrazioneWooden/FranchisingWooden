@@ -282,6 +282,43 @@ async function init() {
   }
 }
 
+function normalizzaCliente(c) {
+  return {
+    id:        c['ID Cliente']      || c.id        || '',
+    nome:      c['Ragione Sociale'] || c.nome      || '',
+    piva:      c['P.IVA / CF']      || c.piva      || '',
+    indirizzo: c['Indirizzo']       || c.indirizzo || '',
+    email:     c['Email']           || c.email     || '',
+  };
+}
+
+function normalizzaFattura(f) {
+  const stato = (f['Stato'] || f.stato || '').replace(/[✅⚠️🔴🔵]/g,'').trim()
+    .replace('NOTA CREDITO','CREDITO').trim();
+  return {
+    n:       f['N° Fattura']  || f.n       || '',
+    data:    f['Data Fattura']|| f.data    || '',
+    cid:     f['ID Cliente']  || f.cid     || '',
+    tot:     parseFloat(f['Totale (€)']  || f.tot)    || 0,
+    pagato:  parseFloat(f['Pagato (€)']  || f.pagato) || 0,
+    residuo: parseFloat(f['Residuo (€)'] || f.residuo)|| 0,
+    stato:   stato || 'APERTA',
+    s30:     f['Scad. 30gg FM'] || f.s30 || '',
+    s60:     f['Scad. 60gg FM'] || f.s60 || '',
+  };
+}
+
+function normalizzaPagamento(p) {
+  return {
+    id:      p['ID Pagamento']   || p.id      || '',
+    data:    p['Data Pagamento'] || p.data    || '',
+    cid:     p['ID Cliente']     || p.cid     || '',
+    importo: parseFloat(p['Importo (€)'] || p.importo) || 0,
+    modo:    p['Modalità']       || p.modo    || '',
+    note:    p['Note']           || p.note    || '',
+  };
+}
+
 async function syncFromSheets() {
   if (!SCRIPT_URL) return;
   setLoading('Sincronizzazione con Google Sheets...');
@@ -290,9 +327,9 @@ async function syncFromSheets() {
     const res = await fetch(SCRIPT_URL + '?action=getAllData', { method: 'GET' });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    if (data.clienti && data.clienti.length) CLIENTI = data.clienti;
-    if (data.fatture && data.fatture.length) FATTURE = data.fatture;
-    if (data.pagamenti && data.pagamenti.length) PAGAMENTI = data.pagamenti;
+    if (data.clienti && data.clienti.length) CLIENTI = data.clienti.map(normalizzaCliente);
+    if (data.fatture && data.fatture.length) FATTURE = data.fatture.map(normalizzaFattura);
+    if (data.pagamenti && data.pagamenti.length) PAGAMENTI = data.pagamenti.map(normalizzaPagamento);
     syncStatus = 'ok';
     lastSyncTime = new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
     localStorage.setItem('fifo_last_sync', lastSyncTime);
