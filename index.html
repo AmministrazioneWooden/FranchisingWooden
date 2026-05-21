@@ -11,70 +11,41 @@
 <title>Franchising FIFO</title>
 <style>
   :root {
-    --bg: #ffffff;
-    --bg2: #f5f5f5;
-    --bg3: #efefef;
-    --text: #1a1a1a;
-    --text2: #666;
-    --text3: #999;
-    --border: rgba(0,0,0,0.12);
-    --border2: rgba(0,0,0,0.22);
-    --success: #2d7a3a;
-    --success-bg: #eaf5ec;
-    --danger: #c0392b;
-    --danger-bg: #fdecea;
-    --warning: #b7770d;
-    --warning-bg: #fef9ec;
-    --info: #1a5fa8;
-    --info-bg: #e8f1fb;
-    --accent: #1a1a1a;
-    --radius: 12px;
-    --radius-sm: 8px;
+    --bg: #ffffff; --bg2: #f5f5f5; --bg3: #efefef;
+    --text: #1a1a1a; --text2: #666; --text3: #999;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+    --success: #2d7a3a; --success-bg: #eaf5ec;
+    --danger: #c0392b; --danger-bg: #fdecea;
+    --warning: #b7770d; --warning-bg: #fef9ec;
+    --info: #1a5fa8; --info-bg: #e8f1fb;
+    --accent: #1a1a1a; --radius: 12px; --radius-sm: 8px;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #111;
-      --bg2: #1e1e1e;
-      --bg3: #2a2a2a;
-      --text: #f0f0f0;
-      --text2: #aaa;
-      --text3: #666;
-      --border: rgba(255,255,255,0.10);
-      --border2: rgba(255,255,255,0.18);
-      --success: #4caf6e;
-      --success-bg: #0d2b14;
-      --danger: #e57373;
-      --danger-bg: #2d1010;
-      --warning: #f0b429;
-      --warning-bg: #2b2000;
-      --info: #64b0f0;
-      --info-bg: #0d1e33;
-      --accent: #f0f0f0;
+      --bg: #111; --bg2: #1e1e1e; --bg3: #2a2a2a;
+      --text: #f0f0f0; --text2: #aaa; --text3: #666;
+      --border: rgba(255,255,255,0.10); --border2: rgba(255,255,255,0.18);
+      --success: #4caf6e; --success-bg: #0d2b14;
+      --danger: #e57373; --danger-bg: #2d1010;
+      --warning: #f0b429; --warning-bg: #2b2000;
+      --info: #64b0f0; --info-bg: #0d1e33; --accent: #f0f0f0;
     }
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; background: var(--bg); color: var(--text); }
   #app { display: flex; flex-direction: column; height: 100%; max-width: 430px; margin: 0 auto; }
-
-  /* NAV */
-  .nav { display: flex; border-bottom: 0.5px solid var(--border); background: var(--bg); flex-shrink: 0; padding-bottom: env(safe-area-inset-bottom, 0); }
-  .nav button { flex: 1; padding: 10px 2px 8px; font-size: 10px; border: none; border-top: 2px solid transparent; background: transparent; color: var(--text3); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
-  .nav button svg { width: 22px; height: 22px; }
+  .nav { display: flex; border-bottom: 0.5px solid var(--border); background: var(--bg); flex-shrink: 0; }
+  .nav button { flex: 1; padding: 8px 1px 6px; font-size: 9px; border: none; border-top: 2px solid transparent; background: transparent; color: var(--text3); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .nav button svg { width: 20px; height: 20px; }
   .nav button.active { color: var(--accent); border-top-color: var(--accent); }
-
-  /* SCREENS */
   .screens { flex: 1; overflow: hidden; position: relative; }
   .screen { display: none; position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px 14px 80px; }
   .screen.active { display: block; }
-
-  /* CARDS */
   .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; }
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
   .stat { background: var(--bg2); border-radius: var(--radius-sm); padding: 10px 12px; }
   .stat-label { font-size: 11px; color: var(--text3); margin-bottom: 3px; }
   .stat-value { font-size: 16px; font-weight: 600; }
-
-  /* ROWS */
   .row { display: flex; align-items: center; gap: 10px; padding: 11px 0; border-bottom: 0.5px solid var(--border); cursor: pointer; }
   .row:last-child { border-bottom: none; }
   .row:active { background: var(--bg2); margin: 0 -14px; padding: 11px 14px; border-radius: var(--radius-sm); }
@@ -82,15 +53,11 @@
   .row-right { margin-left: auto; text-align: right; flex-shrink: 0; }
   .row-right .amount { font-size: 13px; font-weight: 600; }
   .row-right .sub { font-size: 10px; color: var(--text3); }
-
-  /* BADGES */
   .badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
   .badge-aperta { background: var(--danger-bg); color: var(--danger); }
   .badge-saldata { background: var(--success-bg); color: var(--success); }
   .badge-parziale { background: var(--warning-bg); color: var(--warning); }
   .badge-credito { background: var(--info-bg); color: var(--info); }
-
-  /* FAT / PAG ROWS */
   .fat-row { padding: 9px 0; border-bottom: 0.5px solid var(--border); }
   .fat-row:last-child { border-bottom: none; }
   .fat-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
@@ -98,11 +65,7 @@
   .fat-meta { display: flex; justify-content: space-between; align-items: center; }
   .fat-date { font-size: 11px; color: var(--text3); }
   .fat-amount { font-size: 12px; font-weight: 600; }
-
-  /* SECTION TITLE */
   .section-title { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin: 14px 0 8px; }
-
-  /* FORM */
   .field-label { font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 4px; }
   input, select, textarea { width: 100%; font-family: inherit; font-size: 15px; border: 0.5px solid var(--border2); border-radius: var(--radius-sm); padding: 10px 12px; background: var(--bg2); color: var(--text); margin-bottom: 12px; -webkit-appearance: none; appearance: none; }
   input:focus, select:focus { outline: none; border-color: var(--accent); }
@@ -111,38 +74,23 @@
   .btn-secondary { width: 100%; padding: 12px; font-size: 13px; border-radius: var(--radius-sm); border: 0.5px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; margin-bottom: 8px; }
   .btn-secondary:active { background: var(--bg2); }
   .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-
-  /* HEADER */
   .screen-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .screen-title { font-size: 22px; font-weight: 700; }
-  .add-btn { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: var(--bg); border: none; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; }
-
-  /* BACK */
+  .add-btn { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: var(--bg); border: none; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .back-btn { display: flex; align-items: center; gap: 6px; font-size: 15px; color: var(--info); cursor: pointer; margin-bottom: 14px; border: none; background: transparent; font-family: inherit; }
-
-  /* SALDO BAR */
   .saldo-bar { background: var(--bg2); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 10px; }
   .saldo-row { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
-
-  /* SYNC */
   .sync-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
-  .sync-ok { background: var(--success); }
-  .sync-err { background: var(--danger); }
+  .sync-ok { background: var(--success); } .sync-err { background: var(--danger); }
   .sync-loading { background: var(--warning); animation: pulse 1s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-  /* TOAST */
-  #toast { position: fixed; bottom: calc(env(safe-area-inset-bottom, 0px) + 80px); left: 50%; transform: translateX(-50%); background: var(--accent); color: var(--bg); font-size: 13px; padding: 10px 18px; border-radius: 20px; z-index: 999; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+  #toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: var(--accent); color: var(--bg); font-size: 13px; padding: 10px 18px; border-radius: 20px; z-index: 999; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
   #toast.show { opacity: 1; }
-
-  /* LOADING OVERLAY */
   #loading { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; gap: 14px; }
   #loading.hidden { display: none; }
   .spinner-big { width: 36px; height: 36px; border: 3px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   #loading p { font-size: 14px; color: var(--text2); }
-
-  /* SETUP */
   #setup-screen { display: none; position: fixed; inset: 0; background: var(--bg); padding: 40px 20px; z-index: 900; overflow-y: auto; }
   #setup-screen.show { display: block; }
   .setup-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
@@ -152,7 +100,6 @@
   .step-content { font-size: 13px; color: var(--text2); line-height: 1.6; flex: 1; }
   .step-content strong { color: var(--text); }
   code { font-family: 'SF Mono', Menlo, monospace; font-size: 11px; background: var(--bg3); padding: 2px 6px; border-radius: 4px; word-break: break-all; }
-
   .filter-row { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
   .filter-btn { font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; }
   .filter-btn.on { background: var(--accent); color: var(--bg); border-color: var(--accent); }
@@ -162,8 +109,7 @@
 </style>
 </head>
 <body>
-
-<div id="loading">
+  <div id="loading">
   <div class="spinner-big"></div>
   <p id="loading-msg">Caricamento dati...</p>
 </div>
@@ -171,28 +117,10 @@
 <div id="setup-screen">
   <div class="setup-title">Configura la sincronizzazione</div>
   <div class="setup-sub">Segui questi passi per collegare l'app al tuo Google Sheets. Si fa una volta sola.</div>
-
-  <div class="step">
-    <div class="step-num">1</div>
-    <div class="step-content">Apri il tuo Google Sheets e vai su <strong>Estensioni → Apps Script</strong></div>
-  </div>
-  <div class="step">
-    <div class="step-num">2</div>
-    <div class="step-content">Copia il contenuto del file <strong>Code.gs</strong> che hai scaricato e incollalo nell'editor di Apps Script, sostituendo tutto il contenuto esistente</div>
-  </div>
-  <div class="step">
-    <div class="step-num">3</div>
-    <div class="step-content">Clicca su <strong>Distribuisci → Nuova distribuzione</strong>. Scegli tipo <strong>App web</strong>, imposta "Accesso" su <strong>Chiunque</strong> e clicca Distribuisci</div>
-  </div>
-  <div class="step">
-    <div class="step-num">4</div>
-    <div class="step-content">Copia l'<strong>URL della web app</strong> che ti viene mostrato dopo la distribuzione (inizia con <code>https://script.google.com/macros/s/...</code>)</div>
-  </div>
-  <div class="step">
-    <div class="step-num">5</div>
-    <div class="step-content">Incolla l'URL qui sotto e premi Connetti</div>
-  </div>
-
+  <div class="step"><div class="step-num">1</div><div class="step-content">Apri il tuo Google Sheets e vai su <strong>Estensioni → Apps Script</strong></div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-content">Incolla il codice del file <strong>Code_completo.gs</strong> sostituendo tutto il contenuto esistente</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-content">Clicca <strong>Deploy → New deployment</strong>, tipo <strong>Web app</strong>, accesso <strong>Anyone</strong></div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-content">Copia l'URL della web app e incollalo qui sotto</div></div>
   <div class="field-label">URL Web App di Google Apps Script</div>
   <input id="setup-url" placeholder="https://script.google.com/macros/s/..." style="margin-bottom:16px">
   <button class="btn-primary" onclick="saveSetup()">Connetti e sincronizza</button>
@@ -209,6 +137,7 @@
     <div id="s-fatture" class="screen"></div>
     <div id="s-pagamenti" class="screen"></div>
     <div id="s-sheets" class="screen"></div>
+    <div id="s-simulazione" class="screen"></div>
     <div id="s-dettaglio" class="screen"></div>
     <div id="s-nuova-fattura" class="screen"></div>
     <div id="s-nuovo-pagamento" class="screen"></div>
@@ -216,7 +145,7 @@
   <nav class="nav">
     <button onclick="showTab('dashboard')" id="nb-dashboard" class="active">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Dashboard
+      Home
     </button>
     <button onclick="showTab('clienti')" id="nb-clienti">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/></svg>
@@ -230,15 +159,17 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
       Pagamenti
     </button>
+    <button onclick="showTab('simulazione')" id="nb-simulazione">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/></svg>
+      Simula
+    </button>
     <button onclick="showTab('sheets')" id="nb-sheets">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       Sync
     </button>
   </nav>
 </div>
-
 <script>
-// ====== STATE ======
 let SCRIPT_URL = localStorage.getItem('fifo_script_url') || '';
 let CLIENTI = [], FATTURE = [], PAGAMENTI = [];
 let syncStatus = 'idle';
@@ -248,10 +179,9 @@ let detailCid = null;
 let prevScreen = 'dashboard';
 let filterStato = 'TUTTI';
 
-// ====== INIT ======
 const DEFAULT_CLIENTI = [
   {id:'CL001',nome:'LEM SAS',piva:'3891090247',indirizzo:'Piazzotto Montevecchio, 30',email:'lemsasfatture@gmail.com'},
-  {id:'CL002',nome:'CIMINARI ANDREA',piva:'2626890418',indirizzo:'Via Arco D\'Augusto 39',email:'woodenfano@gmail.com'},
+  {id:'CL002',nome:'CIMINARI ANDREA',piva:'2626890418',indirizzo:"Via Arco D'Augusto 39",email:'woodenfano@gmail.com'},
   {id:'CL003',nome:'MOG SRL',piva:'2529870202',indirizzo:'Via G. Oberdan 10/12',email:'woodenmantova@gmail.com'},
   {id:'CL004',nome:'MR SNC',piva:'3271511200',indirizzo:'Via Bettini 18',email:'woodenbologna@gmail.com'},
   {id:'CL005',nome:'SLASH SRL',piva:'3845930985',indirizzo:'Corso Cavour 7/C',email:'woodenstore.bs@gmail.com'},
@@ -267,18 +197,12 @@ async function init() {
     CLIENTI = d.clienti || DEFAULT_CLIENTI;
     FATTURE = d.fatture || [];
     PAGAMENTI = d.pagamenti || [];
-    hideLoading();
-    showApp();
-    renderCurrent();
+    hideLoading(); showApp(); renderCurrent();
     if (SCRIPT_URL) syncFromSheets();
   } else {
     CLIENTI = DEFAULT_CLIENTI;
-    if (SCRIPT_URL) {
-      await syncFromSheets();
-    } else {
-      hideLoading();
-      document.getElementById('setup-screen').classList.add('show');
-    }
+    if (SCRIPT_URL) { await syncFromSheets(); }
+    else { hideLoading(); document.getElementById('setup-screen').classList.add('show'); }
   }
 }
 
@@ -286,28 +210,25 @@ function normalizzaCliente(c) {
   return {
     id:        c['ID Cliente']      || c.id        || '',
     nome:      c['Ragione Sociale'] || c.nome      || '',
-    piva:      c['P.IVA / CF']      || c.piva      || '',
+    piva:      String(c['P.IVA / CF'] || c.piva    || ''),
     indirizzo: c['Indirizzo']       || c.indirizzo || '',
     email:     c['Email']           || c.email     || '',
   };
 }
-
 function normalizzaFattura(f) {
-  const stato = (f['Stato'] || f.stato || '').replace(/[✅⚠️🔴🔵]/g,'').trim()
-    .replace('NOTA CREDITO','CREDITO').trim();
+  const stato = (f['Stato'] || f.stato || '').replace(/[✅⚠️🔴🔵]/g,'').trim().replace('NOTA CREDITO','CREDITO').trim();
   return {
-    n:       f['N° Fattura']  || f.n       || '',
-    data:    f['Data Fattura']|| f.data    || '',
-    cid:     f['ID Cliente']  || f.cid     || '',
-    tot:     parseFloat(f['Totale (€)']  || f.tot)    || 0,
-    pagato:  parseFloat(f['Pagato (€)']  || f.pagato) || 0,
-    residuo: parseFloat(f['Residuo (€)'] || f.residuo)|| 0,
+    n:       f['N° Fattura']   || f.n       || '',
+    data:    f['Data Fattura'] || f.data    || '',
+    cid:     f['ID Cliente']   || f.cid     || '',
+    tot:     parseFloat(f['Totale (€)']  || f.tot)     || 0,
+    pagato:  parseFloat(f['Pagato (€)']  || f.pagato)  || 0,
+    residuo: parseFloat(f['Residuo (€)'] || f.residuo) || 0,
     stato:   stato || 'APERTA',
     s30:     f['Scad. 30gg FM'] || f.s30 || '',
     s60:     f['Scad. 60gg FM'] || f.s60 || '',
   };
 }
-
 function normalizzaPagamento(p) {
   return {
     id:      p['ID Pagamento']   || p.id      || '',
@@ -333,38 +254,22 @@ async function syncFromSheets() {
     syncStatus = 'ok';
     lastSyncTime = new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
     localStorage.setItem('fifo_last_sync', lastSyncTime);
-    saveCache();
-    showToast('Sincronizzato con Sheets');
-  } catch(e) {
-    syncStatus = 'err';
-    showToast('Sync non riuscita: dati locali');
-  }
-  hideLoading();
-  showApp();
-  renderCurrent();
+    saveCache(); showToast('Sincronizzato con Sheets');
+  } catch(e) { syncStatus = 'err'; showToast('Sync non riuscita: dati locali'); }
+  hideLoading(); showApp(); renderCurrent();
 }
 
-function saveCache() {
-  localStorage.setItem('fifo_data', JSON.stringify({ clienti: CLIENTI, fatture: FATTURE, pagamenti: PAGAMENTI }));
-}
+function saveCache() { localStorage.setItem('fifo_data', JSON.stringify({ clienti: CLIENTI, fatture: FATTURE, pagamenti: PAGAMENTI })); }
 
 async function callScript(action, body) {
   if (!SCRIPT_URL) return null;
-  const res = await fetch(SCRIPT_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action, ...body })
-  });
+  const res = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action, ...body }) });
   return await res.json();
 }
 
-// ====== SETUP ======
 async function saveSetup() {
   const url = document.getElementById('setup-url').value.trim();
-  if (!url.includes('script.google.com')) {
-    document.getElementById('setup-msg').textContent = 'URL non valido. Deve iniziare con https://script.google.com/...';
-    return;
-  }
+  if (!url.includes('script.google.com')) { document.getElementById('setup-msg').textContent = 'URL non valido.'; return; }
   document.getElementById('setup-msg').textContent = 'Connessione in corso...';
   SCRIPT_URL = url;
   localStorage.setItem('fifo_script_url', url);
@@ -373,17 +278,12 @@ async function saveSetup() {
 }
 
 function useLocalOnly() {
-  CLIENTI = DEFAULT_CLIENTI;
-  FATTURE = [];
-  PAGAMENTI = [];
+  CLIENTI = DEFAULT_CLIENTI; FATTURE = []; PAGAMENTI = [];
   document.getElementById('setup-screen').classList.remove('show');
-  hideLoading();
-  showApp();
-  renderCurrent();
-  showToast('Modalità locale — i dati non vengono sincronizzati');
+  hideLoading(); showApp(); renderCurrent();
+  showToast('Modalità locale');
 }
 
-// ====== UI HELPERS ======
 function showApp() { document.getElementById('app').style.display = 'flex'; }
 function setLoading(msg) { document.getElementById('loading').classList.remove('hidden'); document.getElementById('loading-msg').textContent = msg; }
 function hideLoading() { document.getElementById('loading').classList.add('hidden'); }
@@ -406,41 +306,32 @@ function showTab(tab) {
 }
 
 function renderCurrent() {
-  const renders = { dashboard: renderDashboard, clienti: renderClienti, fatture: renderFatture, pagamenti: renderPagamenti, sheets: renderSheets };
+  const renders = { dashboard: renderDashboard, clienti: renderClienti, fatture: renderFatture, pagamenti: renderPagamenti, sheets: renderSheets, simulazione: renderSimulazione };
   if (renders[currentTab]) renders[currentTab]();
 }
 
 function showDettaglio(cid) {
-  prevScreen = currentTab;
-  detailCid = cid;
+  prevScreen = currentTab; detailCid = cid;
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('s-dettaglio').classList.add('active');
   renderDettaglio(cid);
 }
-
 function showNuovaFattura(cid) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('s-nuova-fattura').classList.add('active');
   renderNuovaFattura(cid);
 }
-
 function showNuovoPagamento(cid) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('s-nuovo-pagamento').classList.add('active');
   renderNuovoPagamento(cid);
 }
-
 function goBack() {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  if (detailCid) {
-    document.getElementById('s-dettaglio').classList.add('active');
-    renderDettaglio(detailCid);
-  } else {
-    showTab(prevScreen);
-  }
+  if (detailCid) { document.getElementById('s-dettaglio').classList.add('active'); renderDettaglio(detailCid); }
+  else showTab(prevScreen);
 }
 
-// ====== UTILITIES ======
 const fmt = n => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(n);
 const initials = s => s.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
 const today = () => { const d = new Date(); return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`; };
@@ -454,37 +345,13 @@ function clientSaldo(cid) {
   const residuo = FATTURE.filter(f => f.cid===cid && (f.stato==='APERTA'||f.stato==='PARZIALE')).reduce((s,f) => s+parseFloat(f.residuo||0), 0);
   return { fatturato: totFat, pagato: totPag, residuo };
 }
+function nextFatNum() { const nums = FATTURE.map(f => parseInt(f.n.replace('FAT-',''))||0); return `FAT-${Math.max(...nums, 117)+1}`; }
+function nextPagNum() { const nums = PAGAMENTI.map(p => parseInt((p.id||'').replace('PAG-',''))||0); return `PAG-${pad(Math.max(...nums, 27)+1)}`; }
+function addScad(dataStr, mesi) { const [d,m,y] = dataStr.split('/'); const fine = new Date(parseInt(y), parseInt(m)-1+mesi+1, 0); return `${pad(fine.getDate())}/${pad(fine.getMonth()+1)}/${fine.getFullYear()}`; }
+function badgeClass(stato) { if (stato==='SALDATA') return 'badge-saldata'; if (stato==='PARZIALE') return 'badge-parziale'; if (stato==='CREDITO') return 'badge-credito'; return 'badge-aperta'; }
+function fatAmountColor(f) { if (f.stato==='CREDITO') return 'var(--info)'; if (f.residuo>0) return 'var(--danger)'; return 'var(--success)'; }
+function parseDate(s) { if (!s) return 0; const parts = String(s).split('/'); if (parts.length===3) return new Date(parts[2],parts[1]-1,parts[0]).getTime(); return 0; }
 
-function nextFatNum() {
-  const nums = FATTURE.map(f => parseInt(f.n.replace('FAT-',''))||0);
-  return `FAT-${Math.max(...nums, 117)+1}`;
-}
-
-function nextPagNum() {
-  const nums = PAGAMENTI.map(p => parseInt((p.id||'').replace('PAG-',''))||0);
-  return `PAG-${pad(Math.max(...nums, 27)+1)}`;
-}
-
-function addScad(dataStr, mesi) {
-  const [d,m,y] = dataStr.split('/');
-  const fine = new Date(parseInt(y), parseInt(m)-1+mesi+1, 0);
-  return `${pad(fine.getDate())}/${pad(fine.getMonth()+1)}/${fine.getFullYear()}`;
-}
-
-function badgeClass(stato) {
-  if (stato==='SALDATA') return 'badge-saldata';
-  if (stato==='PARZIALE') return 'badge-parziale';
-  if (stato==='CREDITO') return 'badge-credito';
-  return 'badge-aperta';
-}
-
-function fatAmountColor(f) {
-  if (f.stato==='CREDITO') return 'var(--info)';
-  if (f.residuo>0) return 'var(--danger)';
-  return 'var(--success)';
-}
-
-// ====== RENDERS ======
 function renderDashboard() {
   const totRes = FATTURE.filter(f=>f.stato==='APERTA'||f.stato==='PARZIALE').reduce((s,f)=>s+parseFloat(f.residuo||0),0);
   const totFat = FATTURE.filter(f=>f.stato!=='CREDITO').reduce((s,f)=>s+parseFloat(f.tot||0),0);
@@ -492,30 +359,16 @@ function renderDashboard() {
   const nA = FATTURE.filter(f=>f.stato==='APERTA').length;
   const nP = FATTURE.filter(f=>f.stato==='PARZIALE').length;
   const sdot = syncStatus==='ok'?'sync-ok':syncStatus==='loading'?'sync-loading':'sync-err';
-  const slbl = syncStatus==='ok'?`Sync ${lastSyncTime}`:syncStatus==='loading'?'Sincronizzazione...':'Errore sync';
-  let h = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-    <div class="screen-title">Overview</div>
-    <span style="font-size:11px;color:var(--text3)"><span class="sync-dot ${sdot}"></span>${slbl}</span>
-  </div>`;
-  h += `<div class="stat-grid">
-    <div class="stat"><div class="stat-label">Fatturato</div><div class="stat-value" style="font-size:13px">${fmt(totFat)}</div></div>
-    <div class="stat"><div class="stat-label">Incassato</div><div class="stat-value" style="font-size:13px;color:var(--success)">${fmt(totPag)}</div></div>
-    <div class="stat"><div class="stat-label">Da incassare</div><div class="stat-value" style="font-size:13px;color:var(--danger)">${fmt(totRes)}</div></div>
-    <div class="stat"><div class="stat-label">Fatture aperte</div><div class="stat-value" style="font-size:13px;color:var(--warning)">${nA} <span style="font-size:11px;font-weight:400">(${nP} parz.)</span></div></div>
-  </div>`;
+  const slbl = syncStatus==='ok'?`Sync ${lastSyncTime}`:syncStatus==='loading'?'Sync...':'Errore sync';
+  let h = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div class="screen-title">Overview</div><span style="font-size:11px;color:var(--text3)"><span class="sync-dot ${sdot}"></span>${slbl}</span></div>`;
+  h += `<div class="stat-grid"><div class="stat"><div class="stat-label">Fatturato</div><div class="stat-value" style="font-size:13px">${fmt(totFat)}</div></div><div class="stat"><div class="stat-label">Incassato</div><div class="stat-value" style="font-size:13px;color:var(--success)">${fmt(totPag)}</div></div><div class="stat"><div class="stat-label">Da incassare</div><div class="stat-value" style="font-size:13px;color:var(--danger)">${fmt(totRes)}</div></div><div class="stat"><div class="stat-label">Fatture aperte</div><div class="stat-value" style="font-size:13px;color:var(--warning)">${nA} <span style="font-size:11px;font-weight:400">(${nP} parz.)</span></div></div></div>`;
   h += `<div class="section-title">Esposizione clienti</div><div class="card" style="padding:8px 14px">`;
   CLIENTI.forEach(c => {
-    const s = clientSaldo(c.id);
-    if (!s.fatturato && !s.residuo) return;
+    const s = clientSaldo(c.id); if (!s.fatturato && !s.residuo) return;
     const [bg,tc] = ac(c.id);
-    h += `<div class="row" onclick="showDettaglio('${c.id}')">
-      <div class="avatar" style="background:${bg};color:${tc}">${initials(c.nome)}</div>
-      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.nome}</div><div style="font-size:11px;color:var(--text3)">${c.id}</div></div>
-      <div class="row-right"><div class="amount" style="color:${s.residuo>0?'var(--danger)':'var(--success)'}">${fmt(s.residuo)}</div><div class="sub">residuo</div></div>
-    </div>`;
+    h += `<div class="row" onclick="showDettaglio('${c.id}')"><div class="avatar" style="background:${bg};color:${tc}">${initials(c.nome)}</div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.nome}</div><div style="font-size:11px;color:var(--text3)">${c.id}</div></div><div class="row-right"><div class="amount" style="color:${s.residuo>0?'var(--danger)':'var(--success)'}">${fmt(s.residuo)}</div><div class="sub">residuo</div></div></div>`;
   });
-  h += `</div>`;
-  document.getElementById('s-dashboard').innerHTML = h;
+  h += `</div>`; document.getElementById('s-dashboard').innerHTML = h;
 }
 
 function renderClienti() {
@@ -523,23 +376,12 @@ function renderClienti() {
   h += `<input type="search" placeholder="Cerca cliente..." id="srch-cl" oninput="filterCl(this.value)" style="margin-bottom:12px">`;
   h += `<div class="card" style="padding:8px 14px" id="cl-list">`;
   CLIENTI.forEach(c => {
-    const s = clientSaldo(c.id);
-    const [bg,tc] = ac(c.id);
-    h += `<div class="row" onclick="showDettaglio('${c.id}')">
-      <div class="avatar" style="background:${bg};color:${tc}">${initials(c.nome)}</div>
-      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.nome}</div><div style="font-size:11px;color:var(--text3)">${c.email||c.id}</div></div>
-      <div class="row-right"><div class="amount" style="color:${s.residuo>0?'var(--danger)':'var(--success)'}">${fmt(s.residuo)}</div><div class="sub">residuo</div></div>
-    </div>`;
+    const s = clientSaldo(c.id); const [bg,tc] = ac(c.id);
+    h += `<div class="row" onclick="showDettaglio('${c.id}')"><div class="avatar" style="background:${bg};color:${tc}">${initials(c.nome)}</div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.nome}</div><div style="font-size:11px;color:var(--text3)">${c.email||c.id}</div></div><div class="row-right"><div class="amount" style="color:${s.residuo>0?'var(--danger)':'var(--success)'}">${fmt(s.residuo)}</div><div class="sub">residuo</div></div></div>`;
   });
-  h += `</div>`;
-  document.getElementById('s-clienti').innerHTML = h;
+  h += `</div>`; document.getElementById('s-clienti').innerHTML = h;
 }
-
-function filterCl(q) {
-  document.querySelectorAll('#cl-list .row').forEach(r => {
-    r.style.display = r.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
-  });
-}
+function filterCl(q) { document.querySelectorAll('#cl-list .row').forEach(r => { r.style.display = r.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none'; }); }
 
 function renderFatture() {
   const stati = ['TUTTI','APERTA','PARZIALE','SALDATA','CREDITO'];
@@ -553,15 +395,10 @@ function renderFatture() {
   h += `<div class="card" style="padding:8px 14px">`;
   fat.forEach(f => {
     const c = CLIENTI.find(x=>x.id===f.cid);
-    h += `<div class="fat-row">
-      <div class="fat-top"><span class="fat-num">${f.n} — ${c?c.nome:f.cid}</span><span class="badge ${badgeClass(f.stato)}">${f.stato}</span></div>
-      <div class="fat-meta"><span class="fat-date">${f.data} · scad. ${f.s60||'-'}</span><span class="fat-amount" style="color:${fatAmountColor(f)}">${fmt(f.stato==='CREDITO'?f.tot:f.residuo)}</span></div>
-    </div>`;
+    h += `<div class="fat-row"><div class="fat-top"><span class="fat-num">${f.n} — ${c?c.nome:f.cid}</span><span class="badge ${badgeClass(f.stato)}">${f.stato}</span></div><div class="fat-meta"><span class="fat-date">${f.data} · scad. ${f.s60||'-'}</span><span class="fat-amount" style="color:${fatAmountColor(f)}">${fmt(f.stato==='CREDITO'?f.tot:f.residuo)}</span></div></div>`;
   });
-  h += `</div>`;
-  document.getElementById('s-fatture').innerHTML = h;
+  h += `</div>`; document.getElementById('s-fatture').innerHTML = h;
 }
-
 function setFilter(s) { filterStato=s; renderFatture(); }
 
 function renderPagamenti() {
@@ -570,52 +407,27 @@ function renderPagamenti() {
   h += `<div class="card" style="padding:8px 14px">`;
   sorted.forEach(p => {
     const c = CLIENTI.find(x=>x.id===p.cid);
-    h += `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:0.5px solid var(--border)">
-      <div><div style="font-size:13px;font-weight:600">${p.id} — ${c?c.nome:p.cid}</div><div style="font-size:11px;color:var(--text3)">${p.data} · ${p.modo||''}</div></div>
-      <div style="font-size:14px;font-weight:600;color:var(--success)">${fmt(p.importo)}</div>
-    </div>`;
+    h += `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:0.5px solid var(--border)"><div><div style="font-size:13px;font-weight:600">${p.id} — ${c?c.nome:p.cid}</div><div style="font-size:11px;color:var(--text3)">${p.data} · ${p.modo||''}</div></div><div style="font-size:14px;font-weight:600;color:var(--success)">${fmt(p.importo)}</div></div>`;
   });
   h += `<div style="display:flex;justify-content:space-between;font-size:13px;padding:10px 0 2px"><span style="color:var(--text2)">Totale incassato</span><span style="font-weight:700;color:var(--success)">${fmt(sorted.reduce((s,p)=>s+parseFloat(p.importo||0),0))}</span></div>`;
-  h += `</div>`;
-  document.getElementById('s-pagamenti').innerHTML = h;
+  h += `</div>`; document.getElementById('s-pagamenti').innerHTML = h;
 }
-
-function renderDettaglio(cid) {
-  const c = CLIENTI.find(x=>x.id===cid);
-  if (!c) return;
-  const s = clientSaldo(cid);
-  const [bg,tc] = ac(cid);
+  function renderDettaglio(cid) {
+  const c = CLIENTI.find(x=>x.id===cid); if (!c) return;
+  const s = clientSaldo(cid); const [bg,tc] = ac(cid);
   const fatCl = [...FATTURE.filter(f=>f.cid===cid)].sort((a,b)=>b.n.localeCompare(a.n,undefined,{numeric:true}));
   const pagCl = [...PAGAMENTI.filter(p=>p.cid===cid)].sort((a,b)=>b.id.localeCompare(a.id,undefined,{numeric:true}));
   let h = `<button class="back-btn" onclick="showTab('${prevScreen}')">‹ Indietro</button>`;
-  h += `<div class="card">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-      <div class="avatar" style="width:46px;height:46px;font-size:15px;background:${bg};color:${tc}">${initials(c.nome)}</div>
-      <div><div style="font-size:16px;font-weight:700">${c.nome}</div><div style="font-size:12px;color:var(--text2)">${c.id} · P.IVA ${c.piva}</div></div>
-    </div>
-    <div style="font-size:12px;color:var(--text2);margin-bottom:3px">${c.indirizzo}</div>
-    <div style="font-size:12px;color:var(--info)">${c.email}</div>
-  </div>`;
-  h += `<div class="saldo-bar">
-    <div class="saldo-row"><span style="color:var(--text2)">Fatturato</span><span style="font-weight:600">${fmt(s.fatturato)}</span></div>
-    <div class="saldo-row"><span style="color:var(--text2)">Pagato</span><span style="font-weight:600;color:var(--success)">${fmt(s.pagato)}</span></div>
-    <div class="saldo-row" style="border-top:0.5px solid var(--border);padding-top:6px;margin-top:4px"><span style="font-weight:600">Saldo residuo</span><span style="font-weight:700;color:var(--danger)">${fmt(s.residuo)}</span></div>
-  </div>`;
+  h += `<div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div class="avatar" style="width:46px;height:46px;font-size:15px;background:${bg};color:${tc}">${initials(c.nome)}</div><div><div style="font-size:16px;font-weight:700">${c.nome}</div><div style="font-size:12px;color:var(--text2)">${c.id} · P.IVA ${c.piva}</div></div></div><div style="font-size:12px;color:var(--text2);margin-bottom:3px">${c.indirizzo}</div><div style="font-size:12px;color:var(--info)">${c.email}</div></div>`;
+  h += `<div class="saldo-bar"><div class="saldo-row"><span style="color:var(--text2)">Fatturato</span><span style="font-weight:600">${fmt(s.fatturato)}</span></div><div class="saldo-row"><span style="color:var(--text2)">Pagato</span><span style="font-weight:600;color:var(--success)">${fmt(s.pagato)}</span></div><div class="saldo-row" style="border-top:0.5px solid var(--border);padding-top:6px;margin-top:4px"><span style="font-weight:600">Saldo residuo</span><span style="font-weight:700;color:var(--danger)">${fmt(s.residuo)}</span></div></div>`;
   h += `<div class="btn-grid"><button class="btn-secondary" onclick="showNuovaFattura('${cid}')">+ Nuova fattura</button><button class="btn-secondary" onclick="showNuovoPagamento('${cid}')">+ Pagamento</button></div>`;
   h += `<div class="section-title">Fatture (${fatCl.length})</div><div class="card" style="padding:8px 14px">`;
   if (!fatCl.length) h += `<div style="font-size:13px;color:var(--text3);padding:10px 0">Nessuna fattura</div>`;
-  fatCl.forEach(f => {
-    h += `<div class="fat-row">
-      <div class="fat-top"><span class="fat-num">${f.n}</span><span class="badge ${badgeClass(f.stato)}">${f.stato}</span></div>
-      <div class="fat-meta"><span class="fat-date">${f.data}</span><span class="fat-amount" style="color:${fatAmountColor(f)}">${fmt(f.stato==='CREDITO'?f.tot:f.residuo)}</span></div>
-    </div>`;
-  });
+  fatCl.forEach(f => { h += `<div class="fat-row"><div class="fat-top"><span class="fat-num">${f.n}</span><span class="badge ${badgeClass(f.stato)}">${f.stato}</span></div><div class="fat-meta"><span class="fat-date">${f.data}</span><span class="fat-amount" style="color:${fatAmountColor(f)}">${fmt(f.stato==='CREDITO'?f.tot:f.residuo)}</span></div></div>`; });
   h += `</div>`;
   if (pagCl.length) {
     h += `<div class="section-title">Pagamenti (${pagCl.length})</div><div class="card" style="padding:8px 14px">`;
-    pagCl.forEach(p => {
-      h += `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--border)"><div><div style="font-size:12px;font-weight:600">${p.id}</div><div style="font-size:11px;color:var(--text3)">${p.data} · ${p.modo||''}</div></div><div style="font-size:13px;font-weight:600;color:var(--success)">${fmt(p.importo)}</div></div>`;
-    });
+    pagCl.forEach(p => { h += `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--border)"><div><div style="font-size:12px;font-weight:600">${p.id}</div><div style="font-size:11px;color:var(--text3)">${p.data} · ${p.modo||''}</div></div><div style="font-size:13px;font-weight:600;color:var(--success)">${fmt(p.importo)}</div></div>`; });
     h += `</div>`;
   }
   document.getElementById('s-dettaglio').innerHTML = h;
@@ -642,24 +454,15 @@ async function salvaNuovaFattura() {
   const tot = parseFloat(document.getElementById('nf-tot').value);
   const tipo = document.getElementById('nf-tipo').value;
   if (!num||!data||isNaN(tot)||tot===0) { showToast('Compila tutti i campi'); return; }
-  const msg = document.getElementById('nf-msg');
   const c = CLIENTI.find(x=>x.id===cid);
-  const s30 = addScad(data,1);
-  const s60 = addScad(data,2);
+  const s30 = addScad(data,1); const s60 = addScad(data,2);
   const importoFin = tipo==='CREDITO' ? -Math.abs(tot) : Math.abs(tot);
   const nuova = { n:num, data, cid, ragioneSociale:c?.nome||'', tot:importoFin, pagato:0, residuo:tipo==='CREDITO'?0:Math.abs(importoFin), stato:tipo, s30, s60 };
-  FATTURE.push(nuova);
-  saveCache();
+  FATTURE.push(nuova); saveCache();
   if (SCRIPT_URL) {
-    msg.textContent = 'Sincronizzazione...';
-    try {
-      await callScript('addFattura', nuova);
-      syncStatus = 'ok'; lastSyncTime = new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
-      showToast(`${num} salvata su Sheets`);
-    } catch(e) { showToast(`${num} salvata localmente`); }
-  } else {
-    showToast(`${num} aggiunta`);
-  }
+    try { await callScript('addFattura', nuova); showToast(`${num} salvata su Sheets`); }
+    catch(e) { showToast(`${num} salvata localmente`); }
+  } else { showToast(`${num} aggiunta`); }
   if (detailCid) { renderDettaglio(detailCid); document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('s-dettaglio').classList.add('active'); }
   else showTab('fatture');
 }
@@ -669,10 +472,7 @@ function renderNuovoPagamento(cid) {
   let h = `<button class="back-btn" onclick="goBack()">‹ Annulla</button>`;
   h += `<div style="font-size:20px;font-weight:700;margin-bottom:16px">Nuovo pagamento</div>`;
   h += `<div class="field-label">Cliente</div><select id="np-cid" onchange="updateResiduo(this.value)">${opts}</select>`;
-  if (cid) {
-    const sal = clientSaldo(cid);
-    h += `<div class="danger-box">Residuo attuale: ${fmt(sal.residuo)}</div>`;
-  }
+  if (cid) { const sal = clientSaldo(cid); h += `<div class="danger-box">Residuo attuale: ${fmt(sal.residuo)}</div>`; }
   h += `<div id="np-residuo-box"></div>`;
   h += `<div class="field-label">ID pagamento</div><input id="np-id" value="${nextPagNum()}">`;
   h += `<div class="field-label">Data</div><input id="np-data" value="${today()}">`;
@@ -699,31 +499,24 @@ async function salvaNuovoPagamento() {
   const modo = document.getElementById('np-modo').value;
   const note = document.getElementById('np-note').value.trim();
   if (!id||!data||isNaN(importo)||importo<=0) { showToast('Compila tutti i campi'); return; }
-  const msg = document.getElementById('np-msg');
   const c = CLIENTI.find(x=>x.id===cid);
   const aggiornate = applyFIFO(cid, importo);
   const nuovo = { id, data, cid, ragioneSociale:c?.nome||'', importo, modo, note };
-  PAGAMENTI.push(nuovo);
-  saveCache();
+  PAGAMENTI.push(nuovo); saveCache();
   if (SCRIPT_URL) {
-    msg.textContent = 'Sincronizzazione...';
     try {
       await callScript('addPagamento', nuovo);
       for (const f of aggiornate) await callScript('updateFattura', f);
-      syncStatus='ok'; lastSyncTime=new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
       showToast(`${id} salvato su Sheets — FIFO applicato`);
     } catch(e) { showToast(`${id} salvato localmente`); }
-  } else {
-    showToast(`${id} salvato — FIFO applicato`);
-  }
+  } else { showToast(`${id} salvato — FIFO applicato`); }
   if (detailCid) { renderDettaglio(detailCid); document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('s-dettaglio').classList.add('active'); }
   else showTab('pagamenti');
 }
 
 function applyFIFO(cid, importo) {
   let rimanente = importo;
-  const aperte = FATTURE.filter(f => f.cid===cid && (f.stato==='APERTA'||f.stato==='PARZIALE'))
-    .sort((a,b) => parseDate(a.data)-parseDate(b.data));
+  const aperte = FATTURE.filter(f => f.cid===cid && (f.stato==='APERTA'||f.stato==='PARZIALE')).sort((a,b) => parseDate(a.data)-parseDate(b.data));
   const aggiornate = [];
   for (const f of aperte) {
     if (rimanente <= 0) break;
@@ -737,69 +530,94 @@ function applyFIFO(cid, importo) {
   return aggiornate;
 }
 
-function parseDate(s) {
-  if (!s) return 0;
-  const parts = String(s).split('/');
-  if (parts.length===3) return new Date(parts[2],parts[1]-1,parts[0]).getTime();
-  return 0;
+function renderSimulazione() {
+  const opts = CLIENTI.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+  const d = new Date();
+  const todayISO = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  let h = `<div class="screen-title" style="margin-bottom:14px">Simulazione scadenze</div>`;
+  h += `<div class="card">`;
+  h += `<div class="field-label">Cliente</div><select id="sim-cid" onchange="calcolaSimulazione()">${opts}</select>`;
+  h += `<div class="field-label">Data di riferimento</div><input type="date" id="sim-data" value="${todayISO}" onchange="calcolaSimulazione()" style="margin-bottom:4px">`;
+  h += `</div><div id="sim-result"></div>`;
+  document.getElementById('s-simulazione').innerHTML = h;
+  calcolaSimulazione();
+}
+
+function calcolaSimulazione() {
+  const cidEl = document.getElementById('sim-cid');
+  const dataEl = document.getElementById('sim-data');
+  const resultEl = document.getElementById('sim-result');
+  if (!cidEl||!dataEl||!resultEl) return;
+  const cid = cidEl.value;
+  const dataRifStr = dataEl.value;
+  if (!cid||!dataRifStr) return;
+  const dataRif = new Date(dataRifStr);
+  dataRif.setHours(23,59,59,0);
+  const c = CLIENTI.find(x=>x.id===cid);
+  const movimenti = [];
+  for (const fat of FATTURE) {
+    if (fat.cid !== cid) continue;
+    const isNota = parseFloat(fat.tot) < 0;
+    const fatDate = new Date(parseDate(fat.data));
+    if (isNota) {
+      if (fatDate > dataRif) continue;
+      movimenti.push({ data:fatDate, tipo:'Nota credito', desc:fat.n, imp:-parseFloat(fat.tot), color:'var(--info-bg)', tc:'var(--info)' });
+      continue;
+    }
+    const tot = parseFloat(fat.tot)||0;
+    const rata = Math.round((tot/2)*100)/100;
+    const scad30 = parseDate(fat.s30) ? new Date(parseDate(fat.s30)) : null;
+    const scad60 = parseDate(fat.s60) ? new Date(parseDate(fat.s60)) : null;
+    if (scad30 && scad30 <= dataRif) movimenti.push({ data:scad30, tipo:'Fattura 1ª rata', desc:fat.n, imp:-rata, color:'var(--danger-bg)', tc:'var(--danger)' });
+    if (scad60 && scad60 <= dataRif) movimenti.push({ data:scad60, tipo:'Fattura 2ª rata', desc:fat.n, imp:-rata, color:'var(--danger-bg)', tc:'var(--danger)' });
+  }
+  for (const pag of PAGAMENTI) {
+    if (pag.cid !== cid) continue;
+    const pagDate = new Date(parseDate(pag.data));
+    if (pagDate > dataRif) continue;
+    movimenti.push({ data:pagDate, tipo:'Pagamento', desc:pag.id+(pag.modo?' · '+pag.modo:''), imp:parseFloat(pag.importo)||0, color:'var(--success-bg)', tc:'var(--success)' });
+  }
+  if (!movimenti.length) { resultEl.innerHTML = `<div class="empty">Nessun movimento per questa data</div>`; return; }
+  movimenti.sort((a,b) => a.data-b.data);
+  let saldo = 0;
+  for (const m of movimenti) { saldo += m.imp; m.saldo = Math.round(saldo*100)/100; }
+  const saldoPerData = {};
+  for (const m of movimenti) saldoPerData[m.data.toDateString()] = m.saldo;
+  for (const m of movimenti) m.saldo = saldoPerData[m.data.toDateString()];
+  const saldoFinale = Math.round(saldo*100)/100;
+  const saldoColor = saldoFinale >= 0 ? 'var(--success)' : 'var(--danger)';
+  const dataFmtRif = dataRifStr.split('-').reverse().join('/');
+  let h = `<div class="card" style="padding:12px 14px;margin-bottom:10px"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:11px;color:var(--text3);margin-bottom:2px">Saldo al ${dataFmtRif}</div><div style="font-size:22px;font-weight:700;color:${saldoColor}">${fmt(saldoFinale)}</div></div><div style="font-size:12px;color:var(--text2);text-align:right">${c?c.nome:cid}</div></div></div>`;
+  movimenti.sort((a,b) => b.data-a.data);
+  h += `<div class="card" style="padding:8px 14px">`;
+  movimenti.forEach(m => {
+    const df = `${pad(m.data.getDate())}/${pad(m.data.getMonth()+1)}/${m.data.getFullYear()}`;
+    const sc = m.saldo >= 0 ? 'var(--success)' : 'var(--danger)';
+    h += `<div style="padding:9px 0;border-bottom:0.5px solid var(--border)">`;
+    h += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px"><span style="font-size:10px;background:${m.color};color:${m.tc};padding:2px 7px;border-radius:20px;font-weight:600">${m.tipo}</span><span style="font-size:11px;color:var(--text3)">${df}</span></div>`;
+    h += `<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:600">${m.desc}</span><div style="text-align:right"><div style="font-size:12px;font-weight:600;color:${m.imp>=0?'var(--success)':'var(--danger)'}">${m.imp>=0?'+':''}${fmt(m.imp)}</div><div style="font-size:10px;color:${sc}">saldo: ${fmt(m.saldo)}</div></div></div>`;
+    h += `</div>`;
+  });
+  h += `</div>`;
+  resultEl.innerHTML = h;
 }
 
 function renderSheets() {
   const sdot = syncStatus==='ok'?'sync-ok':syncStatus==='loading'?'sync-loading':'sync-err';
   const slbl = syncStatus==='ok'?`Ultima sync: ${lastSyncTime}`:syncStatus==='loading'?'In corso...':'Non connesso';
   let h = `<div class="screen-title" style="margin-bottom:14px">Google Sheets</div>`;
-  h += `<div class="card">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <div style="font-size:14px;font-weight:600">Stato connessione</div>
-      <span style="font-size:11px"><span class="sync-dot ${sdot}"></span>${slbl}</span>
-    </div>
-    <div style="font-size:12px;color:var(--text2);margin-bottom:12px">${SCRIPT_URL||'Nessun URL configurato'}</div>
-    <button class="btn-secondary" onclick="syncFromSheets()">Sincronizza ora</button>
-    <button class="btn-secondary" onclick="openSetup()">Cambia URL script</button>
-  </div>`;
-  h += `<div class="card">
-    <div style="font-size:14px;font-weight:600;margin-bottom:8px">Esporta</div>
-    <button class="btn-secondary" onclick="copyFatture()">Copia fatture (CSV)</button>
-    <button class="btn-secondary" onclick="copyPagamenti()">Copia pagamenti (CSV)</button>
-  </div>`;
-  h += `<div class="card">
-    <div style="font-size:14px;font-weight:600;margin-bottom:6px">Dati locali</div>
-    <div style="font-size:12px;color:var(--text2)">${FATTURE.length} fatture · ${PAGAMENTI.length} pagamenti · ${CLIENTI.length} clienti</div>
-    <div style="margin-top:10px"><button class="btn-secondary" style="color:var(--danger);border-color:var(--danger)" onclick="clearCache()">Cancella cache locale</button></div>
-  </div>`;
+  h += `<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div style="font-size:14px;font-weight:600">Stato connessione</div><span style="font-size:11px"><span class="sync-dot ${sdot}"></span>${slbl}</span></div><div style="font-size:12px;color:var(--text2);margin-bottom:12px;word-break:break-all">${SCRIPT_URL||'Nessun URL configurato'}</div><button class="btn-secondary" onclick="syncFromSheets()">Sincronizza ora</button><button class="btn-secondary" onclick="openSetup()">Cambia URL script</button></div>`;
+  h += `<div class="card"><div style="font-size:14px;font-weight:600;margin-bottom:8px">Esporta</div><button class="btn-secondary" onclick="copyFatture()">Copia fatture (CSV)</button><button class="btn-secondary" onclick="copyPagamenti()">Copia pagamenti (CSV)</button></div>`;
+  h += `<div class="card"><div style="font-size:14px;font-weight:600;margin-bottom:6px">Dati locali</div><div style="font-size:12px;color:var(--text2)">${FATTURE.length} fatture · ${PAGAMENTI.length} pagamenti · ${CLIENTI.length} clienti</div><div style="margin-top:10px"><button class="btn-secondary" style="color:var(--danger);border-color:var(--danger)" onclick="clearCache()">Cancella cache locale</button></div></div>`;
   document.getElementById('s-sheets').innerHTML = h;
 }
 
 function openSetup() { document.getElementById('setup-screen').classList.add('show'); }
+function copyFatture() { const rows = FATTURE.map(f => `${f.n}\t${f.data}\t${f.cid}\t${f.tot}\t${f.stato}\t${f.s30}\t${f.s60}`).join('\n'); navigator.clipboard?.writeText('N°Fattura\tData\tCliente\tTotale\tStato\tScad30\tScad60\n'+rows).then(()=>showToast('Copiato')).catch(()=>showToast('Copia non riuscita')); }
+function copyPagamenti() { const rows = PAGAMENTI.map(p => `${p.id}\t${p.data}\t${p.cid}\t${p.importo}\t${p.modo}`).join('\n'); navigator.clipboard?.writeText('ID\tData\tCliente\tImporto\tModalità\n'+rows).then(()=>showToast('Copiato')).catch(()=>showToast('Copia non riuscita')); }
+function clearCache() { if (confirm('Cancella tutti i dati locali?')) { localStorage.removeItem('fifo_data'); FATTURE=[]; PAGAMENTI=[]; CLIENTI=DEFAULT_CLIENTI; renderCurrent(); showToast('Cache cancellata'); } }
 
-function copyFatture() {
-  const rows = FATTURE.map(f => `${f.n}\t${f.data}\t${f.cid}\t${f.tot}\t${f.stato}\t${f.s30}\t${f.s60}`).join('\n');
-  navigator.clipboard?.writeText('N°Fattura\tData\tCliente\tTotale\tStato\tScad30\tScad60\n'+rows)
-    .then(()=>showToast('Copiato negli appunti'))
-    .catch(()=>showToast('Copia non riuscita'));
-}
-
-function copyPagamenti() {
-  const rows = PAGAMENTI.map(p => `${p.id}\t${p.data}\t${p.cid}\t${p.importo}\t${p.modo}`).join('\n');
-  navigator.clipboard?.writeText('ID\tData\tCliente\tImporto\tModalità\n'+rows)
-    .then(()=>showToast('Copiato negli appunti'))
-    .catch(()=>showToast('Copia non riuscita'));
-}
-
-function clearCache() {
-  if (confirm('Cancella tutti i dati locali?')) {
-    localStorage.removeItem('fifo_data');
-    FATTURE=[]; PAGAMENTI=[]; CLIENTI=DEFAULT_CLIENTI;
-    renderCurrent();
-    showToast('Cache cancellata');
-  }
-}
-
-// ====== SERVICE WORKER ======
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
-}
-
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(()=>{}); }
 init();
 </script>
 </body>
