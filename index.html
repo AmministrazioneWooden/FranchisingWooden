@@ -415,7 +415,7 @@ function renderPagamenti() {
   function renderDettaglio(cid) {
   const c = CLIENTI.find(x=>x.id===cid); if (!c) return;
   const s = clientSaldo(cid); const [bg,tc] = ac(cid);
-  const fatCl = [...FATTURE.filter(f=>f.cid===cid)].sort((a,b)=>b.n.localeCompare(a.n,undefined,{numeric:true}));
+  const fatCl = [...FATTURE.filter(f=>f.cid===cid)].sort((a,b)=>parseDate(b.data)-parseDate(a.data));
   const pagCl = [...PAGAMENTI.filter(p=>p.cid===cid)].sort((a,b)=>b.id.localeCompare(a.id,undefined,{numeric:true}));
   let h = `<button class="back-btn" onclick="showTab('${prevScreen}')">‹ Indietro</button>`;
   h += `<div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div class="avatar" style="width:46px;height:46px;font-size:15px;background:${bg};color:${tc}">${initials(c.nome)}</div><div><div style="font-size:16px;font-weight:700">${c.nome}</div><div style="font-size:12px;color:var(--text2)">${c.id} · P.IVA ${c.piva}</div></div></div><div style="font-size:12px;color:var(--text2);margin-bottom:3px">${c.indirizzo}</div><div style="font-size:12px;color:var(--info)">${c.email}</div></div>`;
