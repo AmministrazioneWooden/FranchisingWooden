@@ -174,7 +174,7 @@ function showTab(tab) {
   document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
   document.getElementById('s-' + tab).classList.add('active');
   document.getElementById('nb-' + tab).classList.add('active');
-  const renders = { saldo:renderSaldo, fatture:renderFatture, pagamenti:renderPagamenti, simulazione:renderSimulazione };
+  const renders = { fatture:renderFatture, pagamenti:renderPagamenti, simulazione:renderSimulazione };
   if (renders[tab]) renders[tab]();
 }
 
