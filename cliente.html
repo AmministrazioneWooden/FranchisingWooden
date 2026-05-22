@@ -156,7 +156,7 @@ async function init() {
     PAGAMENTI = (data.pagamenti||[]).map(normalizzaPagamento).filter(p => p.cid.toUpperCase() === CID);
     document.getElementById('loading').classList.add('hidden');
     document.getElementById('app').style.display = 'flex';
-    renderSaldo();
+    renderFatture();
   } catch(e) {
     showErrore();
   }
@@ -174,27 +174,6 @@ function showTab(tab) {
   document.getElementById('nb-' + tab).classList.add('active');
   const renders = { saldo:renderSaldo, fatture:renderFatture, pagamenti:renderPagamenti, simulazione:renderSimulazione };
   if (renders[tab]) renders[tab]();
-}
-
-function renderSaldo() {
-  const totFat = FATTURE.filter(f=>f.stato!=='CREDITO').reduce((s,f)=>s+f.tot,0);
-  const totPag = PAGAMENTI.reduce((s,p)=>s+p.importo,0);
-  const residuo = FATTURE.filter(f=>f.stato==='APERTA'||f.stato==='PARZIALE').reduce((s,f)=>s+f.residuo,0);
-  const nA = FATTURE.filter(f=>f.stato==='APERTA').length;
-  const nP = FATTURE.filter(f=>f.stato==='PARZIALE').length;
-  let h = `<div class="screen-title">${CLIENTE.nome}</div>`;
-  h += `<div style="font-size:12px;color:var(--text3);margin-bottom:16px">${CLIENTE.id}</div>`;
-  h += `<div class="saldo-bar">`;
-  h += `<div class="saldo-row"><span style="color:var(--text2)">Totale fatturato</span><span style="font-weight:600">${fmt(totFat)}</span></div>`;
-  h += `<div class="saldo-row"><span style="color:var(--text2)">Totale pagato</span><span style="font-weight:600;color:var(--success)">${fmt(totPag)}</span></div>`;
-  h += `<div class="saldo-row" style="border-top:0.5px solid var(--border);padding-top:8px;margin-top:4px"><span style="font-weight:700;font-size:14px">Saldo residuo</span><span style="font-weight:700;font-size:18px;color:${residuo>0?'var(--danger)':'var(--success)'}">${fmt(residuo)}</span></div>`;
-  h += `</div>`;
-  h += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">`;
-  h += `<div style="background:var(--danger-bg);border-radius:var(--radius-sm);padding:12px;text-align:center"><div style="font-size:11px;color:var(--text3);margin-bottom:4px">Fatture aperte</div><div style="font-size:22px;font-weight:700;color:var(--danger)">${nA}</div></div>`;
-  h += `<div style="background:var(--warning-bg);border-radius:var(--radius-sm);padding:12px;text-align:center"><div style="font-size:11px;color:var(--text3);margin-bottom:4px">Parziali</div><div style="font-size:22px;font-weight:700;color:var(--warning)">${nP}</div></div>`;
-  h += `</div>`;
-  h += `<div style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px">Aggiornato al ${new Date().toLocaleDateString('it-IT')}</div>`;
-  document.getElementById('s-saldo').innerHTML = h;
 }
 
 function renderFatture() {
