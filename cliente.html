@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#1a1a1a">
+<title>Il mio conto</title>
+<style>
+  :root {
+    --bg:#ffffff;--bg2:#f5f5f5;--bg3:#efefef;
+    --text:#1a1a1a;--text2:#666;--text3:#999;
+    --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.22);
+    --success:#2d7a3a;--success-bg:#eaf5ec;
+    --danger:#c0392b;--danger-bg:#fdecea;
+    --warning:#b7770d;--warning-bg:#fef9ec;
+    --info:#1a5fa8;--info-bg:#e8f1fb;
+    --accent:#1a1a1a;--radius:12px;--radius-sm:8px;
+  }
+  @media(prefers-color-scheme:dark){:root{
+    --bg:#111;--bg2:#1e1e1e;--bg3:#2a2a2a;
+    --text:#f0f0f0;--text2:#aaa;--text3:#666;
+    --border:rgba(255,255,255,0.10);--border2:rgba(255,255,255,0.18);
+    --success:#4caf6e;--success-bg:#0d2b14;
+    --danger:#e57373;--danger-bg:#2d1010;
+    --warning:#f0b429;--warning-bg:#2b2000;
+    --info:#64b0f0;--info-bg:#0d1e33;--accent:#f0f0f0;
+  }}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+  #app{display:flex;flex-direction:column;height:100%;max-width:430px;margin:0 auto}
+  .nav{display:flex;border-bottom:0.5px solid var(--border);background:var(--bg);flex-shrink:0}
+  .nav button{flex:1;padding:8px 2px 6px;font-size:10px;border:none;border-top:2px solid transparent;background:transparent;color:var(--text3);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+  .nav button svg{width:20px;height:20px}
+  .nav button.active{color:var(--accent);border-top-color:var(--accent)}
+  .screens{flex:1;overflow:hidden;position:relative}
+  .screen{display:none;position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 14px 80px}
+  .screen.active{display:block}
+  .card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+  .badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600}
+  .badge-aperta{background:var(--danger-bg);color:var(--danger)}
+  .badge-saldata{background:var(--success-bg);color:var(--success)}
+  .badge-parziale{background:var(--warning-bg);color:var(--warning)}
+  .badge-credito{background:var(--info-bg);color:var(--info)}
+  .fat-row{padding:9px 0;border-bottom:0.5px solid var(--border)}
+  .fat-row:last-child{border-bottom:none}
+  .section-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin:14px 0 8px}
+  .screen-title{font-size:22px;font-weight:700;margin-bottom:4px}
+  .field-label{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:4px}
+  input,select{width:100%;font-family:inherit;font-size:15px;border:0.5px solid var(--border2);border-radius:var(--radius-sm);padding:10px 12px;background:var(--bg2);color:var(--text);margin-bottom:12px;-webkit-appearance:none;appearance:none}
+  input:focus,select:focus{outline:none;border-color:var(--accent)}
+  .saldo-bar{background:var(--bg2);border-radius:var(--radius-sm);padding:14px;margin-bottom:10px}
+  .saldo-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0}
+  .empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:14px}
+  .filter-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+  .filter-btn{font-size:11px;padding:5px 12px;border-radius:20px;border:0.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer}
+  .filter-btn.on{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+  #loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;gap:14px}
+  #loading.hidden{display:none}
+  .spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #loading p{font-size:14px;color:var(--text2)}
+  #errore{position:fixed;inset:0;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;z-index:1000}
+  #errore.show{display:flex}
+  .err-icon{font-size:48px;margin-bottom:16px}
+  .err-title{font-size:20px;font-weight:700;margin-bottom:8px}
+  .err-sub{font-size:14px;color:var(--text2);line-height:1.6}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <p id="loading-msg">Caricamento dati...</p>
+</div>
+
+<div id="errore">
+  <div class="err-icon">🔒</div>
+  <div class="err-title">Link non valido</div>
+  <div class="err-sub">Questo link non è associato a nessun cliente.<br>Contatta il tuo fornitore per ricevere il link corretto.</div>
+</div>
+
+<div id="app" style="display:none">
+  <div class="screens">
+    <div id="s-saldo" class="screen active"></div>
+    <div id="s-fatture" class="screen"></div>
+    <div id="s-pagamenti" class="screen"></div>
+    <div id="s-simulazione" class="screen"></div>
+  </div>
+  <nav class="nav">
+    <button onclick="showTab('saldo')" id="nb-saldo" class="active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Saldo
+    </button>
+    <button onclick="showTab('fatture')" id="nb-fatture">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+      Fatture
+    </button>
+    <button onclick="showTab('pagamenti')" id="nb-pagamenti">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      Pagamenti
+    </button>
+    <button onclick="showTab('simulazione')" id="nb-simulazione">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/></svg>
+      Scadenze
+    </button>
+  </nav>
+</div>
+
+<script>
+const SCRIPT_URL = localStorage.getItem('fifo_script_url') || '';
+let CID = '';
+let CLIENTE = null;
+let FATTURE = [];
+let PAGAMENTI = [];
+let filterStato = 'TUTTI';
+
+const fmt = n => new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'}).format(n);
+const pad = n => String(n).padStart(2,'0');
+
+function parseDate(s) {
+  if (!s) return 0;
+  const p = String(s).split('/');
+  if (p.length===3) return new Date(p[2],p[1]-1,p[0]).getTime();
+  return 0;
+}
+
+function normalizzaCliente(c) {
+  return { id:c['ID Cliente']||c.id||'', nome:c['Ragione Sociale']||c.nome||'', piva:String(c['P.IVA / CF']||c.piva||''), indirizzo:c['Indirizzo']||c.indirizzo||'', email:c['Email']||c.email||'' };
+}
+function normalizzaFattura(f) {
+  const stato = (f['Stato']||f.stato||'').replace(/[✅⚠️🔴🔵]/g,'').trim().replace('NOTA CREDITO','CREDITO').trim();
+  return { n:f['N° Fattura']||f.n||'', data:f['Data Fattura']||f.data||'', cid:f['ID Cliente']||f.cid||'', tot:parseFloat(f['Totale (€)']||f.tot)||0, pagato:parseFloat(f['Pagato (€)']||f.pagato)||0, residuo:parseFloat(f['Residuo (€)']||f.residuo)||0, stato:stato||'APERTA', s30:f['Scad. 30gg FM']||f.s30||'', s60:f['Scad. 60gg FM']||f.s60||'' };
+}
+function normalizzaPagamento(p) {
+  return { id:p['ID Pagamento']||p.id||'', data:p['Data Pagamento']||p.data||'', cid:p['ID Cliente']||p.cid||'', importo:parseFloat(p['Importo (€)']||p.importo)||0, modo:p['Modalità']||p.modo||'' };
+}
+
+function badgeClass(s) {
+  if (s==='SALDATA') return 'badge-saldata';
+  if (s==='PARZIALE') return 'badge-parziale';
+  if (s==='CREDITO') return 'badge-credito';
+  return 'badge-aperta';
+}
+
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  CID = (params.get('cliente') || '').toUpperCase().trim();
+  if (!CID) { showErrore(); return; }
+  if (!SCRIPT_URL) { showErrore(); return; }
+  try {
+    document.getElementById('loading-msg').textContent = 'Caricamento dati...';
+    const res = await fetch(SCRIPT_URL + '?action=getAllData');
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    const tutti = (data.clienti||[]).map(normalizzaCliente);
+    CLIENTE = tutti.find(c => c.id.toUpperCase() === CID);
+    if (!CLIENTE) { showErrore(); return; }
+    FATTURE = (data.fatture||[]).map(normalizzaFattura).filter(f => f.cid.toUpperCase() === CID);
+    PAGAMENTI = (data.pagamenti||[]).map(normalizzaPagamento).filter(p => p.cid.toUpperCase() === CID);
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('app').style.display = 'flex';
+    renderSaldo();
+  } catch(e) {
+    showErrore();
+  }
+}
+
+function showErrore() {
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('errore').classList.add('show');
+}
+
+function showTab(tab) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('s-' + tab).classList.add('active');
+  document.getElementById('nb-' + tab).classList.add('active');
+  const renders = { saldo:renderSaldo, fatture:renderFatture, pagamenti:renderPagamenti, simulazione:renderSimulazione };
+  if (renders[tab]) renders[tab]();
+}
+
+function renderSaldo() {
+  const totFat = FATTURE.filter(f=>f.stato!=='CREDITO').reduce((s,f)=>s+f.tot,0);
+  const totPag = PAGAMENTI.reduce((s,p)=>s+p.importo,0);
+  const residuo = FATTURE.filter(f=>f.stato==='APERTA'||f.stato==='PARZIALE').reduce((s,f)=>s+f.residuo,0);
+  const nA = FATTURE.filter(f=>f.stato==='APERTA').length;
+  const nP = FATTURE.filter(f=>f.stato==='PARZIALE').length;
+  let h = `<div class="screen-title">${CLIENTE.nome}</div>`;
+  h += `<div style="font-size:12px;color:var(--text3);margin-bottom:16px">${CLIENTE.id}</div>`;
+  h += `<div class="saldo-bar">`;
+  h += `<div class="saldo-row"><span style="color:var(--text2)">Totale fatturato</span><span style="font-weight:600">${fmt(totFat)}</span></div>`;
+  h += `<div class="saldo-row"><span style="color:var(--text2)">Totale pagato</span><span style="font-weight:600;color:var(--success)">${fmt(totPag)}</span></div>`;
+  h += `<div class="saldo-row" style="border-top:0.5px solid var(--border);padding-top:8px;margin-top:4px"><span style="font-weight:700;font-size:14px">Saldo residuo</span><span style="font-weight:700;font-size:18px;color:${residuo>0?'var(--danger)':'var(--success)'}">${fmt(residuo)}</span></div>`;
+  h += `</div>`;
+  h += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">`;
+  h += `<div style="background:var(--danger-bg);border-radius:var(--radius-sm);padding:12px;text-align:center"><div style="font-size:11px;color:var(--text3);margin-bottom:4px">Fatture aperte</div><div style="font-size:22px;font-weight:700;color:var(--danger)">${nA}</div></div>`;
+  h += `<div style="background:var(--warning-bg);border-radius:var(--radius-sm);padding:12px;text-align:center"><div style="font-size:11px;color:var(--text3);margin-bottom:4px">Parziali</div><div style="font-size:22px;font-weight:700;color:var(--warning)">${nP}</div></div>`;
+  h += `</div>`;
+  h += `<div style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px">Aggiornato al ${new Date().toLocaleDateString('it-IT')}</div>`;
+  document.getElementById('s-saldo').innerHTML = h;
+}
+
+function renderFatture() {
+  const stati = ['TUTTI','APERTA','PARZIALE','SALDATA','CREDITO'];
+  let h = `<div style="font-size:22px;font-weight:700;margin-bottom:12px">Fatture</div>`;
+  h += `<div class="filter-row">`;
+  stati.forEach(s => h += `<button class="filter-btn ${filterStato===s?'on':''}" onclick="setFilter('${s}')">${s}</button>`);
+  h += `</div>`;
+  let fat = [...FATTURE].sort((a,b) => parseDate(b.data)-parseDate(a.data));
+  if (filterStato!=='TUTTI') fat = fat.filter(f=>f.stato===filterStato);
+  if (!fat.length) { h += `<div class="empty">Nessuna fattura trovata</div>`; document.getElementById('s-fatture').innerHTML=h; return; }
+  h += `<div class="card" style="padding:8px 14px">`;
+  fat.forEach(f => {
+    const resColor = f.stato==='CREDITO'?'var(--info)':f.residuo>0?'var(--danger)':'var(--success)';
+    const resAmt = f.stato==='CREDITO'?f.tot:f.residuo;
+    h += `<div class="fat-row">`;
+    h += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px"><span style="font-size:13px;font-weight:600">${f.n}</span><span class="badge ${badgeClass(f.stato)}">${f.stato}</span></div>`;
+    h += `<div style="display:flex;justify-content:space-between;align-items:center">`;
+    h += `<span style="font-size:11px;color:var(--text3)">${f.data} · scad. ${f.s60||'-'}</span>`;
+    h += `<span style="font-size:13px;font-weight:600;color:${resColor}">${fmt(resAmt)}</span>`;
+    h += `</div></div>`;
+  });
+  h += `</div>`;
+  document.getElementById('s-fatture').innerHTML = h;
+}
+function setFilter(s) { filterStato=s; renderFatture(); }
+
+function renderPagamenti() {
+  const sorted = [...PAGAMENTI].sort((a,b) => parseDate(b.data)-parseDate(a.data));
+  let h = `<div style="font-size:22px;font-weight:700;margin-bottom:12px">Pagamenti</div>`;
+  if (!sorted.length) { h += `<div class="empty">Nessun pagamento trovato</div>`; document.getElementById('s-pagamenti').innerHTML=h; return; }
+  h += `<div class="card" style="padding:8px 14px">`;
+  sorted.forEach(p => {
+    h += `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:0.5px solid var(--border)">`;
+    h += `<div><div style="font-size:13px;font-weight:600">${p.id}</div><div style="font-size:11px;color:var(--text3)">${p.data}${p.modo?' · '+p.modo:''}</div></div>`;
+    h += `<div style="font-size:14px;font-weight:600;color:var(--success)">${fmt(p.importo)}</div>`;
+    h += `</div>`;
+  });
+  const tot = sorted.reduce((s,p)=>s+p.importo,0);
+  h += `<div style="display:flex;justify-content:space-between;font-size:13px;padding:10px 0 2px"><span style="color:var(--text2)">Totale pagato</span><span style="font-weight:700;color:var(--success)">${fmt(tot)}</span></div>`;
+  h += `</div>`;
+  document.getElementById('s-pagamenti').innerHTML = h;
+}
+
+function renderSimulazione() {
+  const d = new Date();
+  const todayISO = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  let h = `<div style="font-size:22px;font-weight:700;margin-bottom:12px">Simulazione scadenze</div>`;
+  h += `<div class="card"><div class="field-label">Data di riferimento</div><input type="date" id="sim-data" value="${todayISO}" onchange="calcolaSimulazione()" style="margin-bottom:4px"></div>`;
+  h += `<div id="sim-result"></div>`;
+  document.getElementById('s-simulazione').innerHTML = h;
+  calcolaSimulazione();
+}
+
+function calcolaSimulazione() {
+  const dataEl = document.getElementById('sim-data');
+  const resultEl = document.getElementById('sim-result');
+  if (!dataEl||!resultEl) return;
+  const dataRifStr = dataEl.value;
+  if (!dataRifStr) return;
+  const dataRif = new Date(dataRifStr);
+  dataRif.setHours(23,59,59,0);
+  const movimenti = [];
+  for (const fat of FATTURE) {
+    const isNota = fat.tot < 0;
+    const fatDate = new Date(parseDate(fat.data));
+    if (isNota) {
+      if (fatDate > dataRif) continue;
+      movimenti.push({ data:fatDate, tipo:'Nota credito', desc:fat.n, imp:-fat.tot, color:'var(--info-bg)', tc:'var(--info)' });
+      continue;
+    }
+    const rata = Math.round((fat.tot/2)*100)/100;
+    const scad30 = parseDate(fat.s30)?new Date(parseDate(fat.s30)):null;
+    const scad60 = parseDate(fat.s60)?new Date(parseDate(fat.s60)):null;
+    if (scad30&&scad30<=dataRif) movimenti.push({ data:scad30, tipo:'Fattura 1ª rata', desc:fat.n, imp:-rata, color:'var(--danger-bg)', tc:'var(--danger)' });
+    if (scad60&&scad60<=dataRif) movimenti.push({ data:scad60, tipo:'Fattura 2ª rata', desc:fat.n, imp:-rata, color:'var(--danger-bg)', tc:'var(--danger)' });
+  }
+  for (const pag of PAGAMENTI) {
+    const pagDate = new Date(parseDate(pag.data));
+    if (pagDate > dataRif) continue;
+    movimenti.push({ data:pagDate, tipo:'Pagamento', desc:pag.id+(pag.modo?' · '+pag.modo:''), imp:pag.importo, color:'var(--success-bg)', tc:'var(--success)' });
+  }
+  if (!movimenti.length) { resultEl.innerHTML=`<div class="empty">Nessun movimento per questa data</div>`; return; }
+  movimenti.sort((a,b)=>a.data-b.data);
+  let saldo=0;
+  for (const m of movimenti) { saldo+=m.imp; m.saldo=Math.round(saldo*100)/100; }
+  const spd={};
+  for (const m of movimenti) spd[m.data.toDateString()]=m.saldo;
+  for (const m of movimenti) m.saldo=spd[m.data.toDateString()];
+  const saldoFinale=Math.round(saldo*100)/100;
+  const sc=saldoFinale>=0?'var(--success)':'var(--danger)';
+  const dataFmt=dataRifStr.split('-').reverse().join('/');
+  let h=`<div class="card" style="padding:12px 14px;margin-bottom:10px"><div style="font-size:11px;color:var(--text3);margin-bottom:4px">Saldo al ${dataFmt}</div><div style="font-size:26px;font-weight:700;color:${sc}">${fmt(saldoFinale)}</div></div>`;
+  movimenti.sort((a,b)=>b.data-a.data);
+  h+=`<div class="card" style="padding:8px 14px">`;
+  movimenti.forEach(m=>{
+    const df=`${pad(m.data.getDate())}/${pad(m.data.getMonth()+1)}/${m.data.getFullYear()}`;
+    const msc=m.saldo>=0?'var(--success)':'var(--danger)';
+    h+=`<div style="padding:9px 0;border-bottom:0.5px solid var(--border)">`;
+    h+=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px"><span style="font-size:10px;background:${m.color};color:${m.tc};padding:2px 7px;border-radius:20px;font-weight:600">${m.tipo}</span><span style="font-size:11px;color:var(--text3)">${df}</span></div>`;
+    h+=`<div style="display:flex;justify-content:space-between"><span style="font-size:12px;font-weight:600">${m.desc}</span><div style="text-align:right"><div style="font-size:12px;font-weight:600;color:${m.imp>=0?'var(--success)':'var(--danger)'}">${m.imp>=0?'+':''}${fmt(m.imp)}</div><div style="font-size:10px;color:${msc}">saldo: ${fmt(m.saldo)}</div></div></div>`;
+    h+=`</div>`;
+  });
+  h+=`</div>`;
+  resultEl.innerHTML=h;
+}
+
+init();
+</script>
+</body>
+</html>
