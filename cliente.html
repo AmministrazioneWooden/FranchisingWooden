@@ -153,7 +153,9 @@ async function init() {
     CLIENTE = tutti.find(c => c.id.toUpperCase() === CID);
     if (!CLIENTE) { showErrore(); return; }
     FATTURE = (data.fatture||[]).map(normalizzaFattura).filter(f => f.cid.toUpperCase() === CID);
-    PAGAMENTI = (data.pagamenti||[]).map(normalizzaPagamento).filter(p => p.cid.toUpperCase() === CID);
+    console.log('PAGAMENTI RAW:', JSON.stringify(data.pagamenti && data.pagamenti[0]));
+PAGAMENTI = (data.pagamenti||[]).map(normalizzaPagamento).filter(p => p.cid.toUpperCase() === CID);
+console.log('PAGAMENTI FILTRATI:', PAGAMENTI.length);
     document.getElementById('loading').classList.add('hidden');
     document.getElementById('app').style.display = 'flex';
     renderFatture();
