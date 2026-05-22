@@ -74,7 +74,14 @@
   <div class="spinner"></div>
   <p id="loading-msg">Caricamento dati...</p>
 </div>
-
+<div id="pin-screen" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:2000;flex-direction:column;align-items:center;justify-content:center;padding:40px 30px">
+  <div style="font-size:32px;margin-bottom:16px">🔐</div>
+  <div style="font-size:22px;font-weight:700;margin-bottom:8px;color:var(--text)">Area riservata</div>
+  <div style="font-size:14px;color:var(--text2);margin-bottom:32px">Inserisci il tuo PIN per accedere</div>
+  <input id="pin-input" type="password" inputmode="numeric" maxlength="6" placeholder="••••" style="text-align:center;font-size:28px;letter-spacing:8px;width:160px;margin-bottom:16px" onkeydown="if(event.key==='Enter')checkPin()">
+  <button onclick="checkPin()" style="background:var(--accent);color:var(--bg);border:none;border-radius:12px;padding:14px 40px;font-size:15px;font-weight:600;cursor:pointer;width:160px">Entra</button>
+  <div id="pin-error" style="display:none;color:var(--danger);font-size:13px;margin-top:14px">PIN non corretto</div>
+</div>
 <div id="errore">
   <div class="err-icon">🔒</div>
   <div class="err-title">Link non valido</div>
@@ -105,6 +112,16 @@
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxOTM4PntE9fLuyv7eHugZFZ7zyCXz-iXt8GV_yJBafVmgkdpSNfIkH1yMRkdPsQg/exec';
+const PIN_CLIENTI = {
+  'CL001': '1221',
+  'CL002': '2112',
+  'CL003': '3223',
+  'CL004': '4567',
+  'CL005': '5432',
+  'CL006': '6667',
+  'CL007': '7227',
+  'CL008': '8118',
+};  
 let CID = '';
 let CLIENTE = null;
 let FATTURE = [];
@@ -283,7 +300,28 @@ function calcolaSimulazione() {
   resultEl.innerHTML=h;
 }
 
-init();
+function checkPin() {
+  const pin = document.getElementById('pin-input').value;
+  const pinCorretto = PIN_CLIENTI[CID] || '0000';
+  if (pin === pinCorretto) {
+    localStorage.setItem('fifo_pin_ok_' + CID, '1');
+    document.getElementById('pin-screen').style.display = 'none';
+    init();
+  } else {
+    document.getElementById('pin-error').style.display = 'block';
+    document.getElementById('pin-input').value = '';
+  }
+}
+
+const params = new URLSearchParams(window.location.search);
+const CID_PRE = (params.get('cliente') || '').toUpperCase().trim();
+
+if (localStorage.getItem('fifo_pin_ok_' + CID_PRE) === '1') {
+  init();
+} else {
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('pin-screen').style.display = 'flex';
+}
 </script>
 </body>
 </html>
