@@ -302,7 +302,7 @@ function calcolaSimulazione() {
 
 function checkPin() {
   const pin = document.getElementById('pin-input').value;
-  const pinCorretto = PIN_CLIENTI[CID] || '0000';
+  const pinCorretto = PIN_CLIENTI[CID_PRE] || '0000';
   if (pin === pinCorretto) {
     localStorage.setItem('fifo_pin_ok_' + CID, '1');
     document.getElementById('pin-screen').style.display = 'none';
