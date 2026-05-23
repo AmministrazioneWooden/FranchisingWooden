@@ -301,8 +301,20 @@ function calcolaSimulazione() {
 }
 
 function checkPin() {
+  function checkPin() {
   const pin = document.getElementById('pin-input').value.trim();
-  const pinCorretto = PIN_CLIENTI[CID_PRE] || '0000';
+  const params2 = new URLSearchParams(window.location.search);
+  const cidAttuale = (params2.get('cliente') || '').toUpperCase().trim();
+  const pinCorretto = PIN_CLIENTI[cidAttuale] || '0000';
+  if (pin === pinCorretto) {
+    localStorage.setItem('fifo_pin_ok_' + cidAttuale, '1');
+    document.getElementById('pin-screen').style.display = 'none';
+    init();
+  } else {
+    document.getElementById('pin-error').style.display = 'block';
+    document.getElementById('pin-input').value = '';
+  }
+}
   if (pin === pinCorretto) {
     localStorage.setItem('fifo_pin_ok_' + CID, '1');
     document.getElementById('pin-screen').style.display = 'none';
