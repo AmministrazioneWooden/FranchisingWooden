@@ -301,7 +301,6 @@ function calcolaSimulazione() {
 }
 
 function checkPin() {
-  function checkPin() {
   const pin = document.getElementById('pin-input').value.trim();
   const params2 = new URLSearchParams(window.location.search);
   const cidAttuale = (params2.get('cliente') || '').toUpperCase().trim();
@@ -314,6 +313,7 @@ function checkPin() {
     document.getElementById('pin-error').style.display = 'block';
     document.getElementById('pin-input').value = '';
   }
+}
 }
   if (pin === pinCorretto) {
     localStorage.setItem('fifo_pin_ok_' + CID, '1');
