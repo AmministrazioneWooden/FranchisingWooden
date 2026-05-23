@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#1a1a1a">
-<title>Il mio conto</title>
+<title>Area Cliente</title>
 <style>
   :root {
     --bg:#ffffff;--bg2:#f5f5f5;--bg3:#efefef;
@@ -46,22 +47,20 @@
   .fat-row{padding:9px 0;border-bottom:0.5px solid var(--border)}
   .fat-row:last-child{border-bottom:none}
   .section-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin:14px 0 8px}
-  .screen-title{font-size:22px;font-weight:700;margin-bottom:4px}
   .field-label{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:4px}
   input,select{width:100%;font-family:inherit;font-size:15px;border:0.5px solid var(--border2);border-radius:var(--radius-sm);padding:10px 12px;background:var(--bg2);color:var(--text);margin-bottom:12px;-webkit-appearance:none;appearance:none}
   input:focus,select:focus{outline:none;border-color:var(--accent)}
-  .saldo-bar{background:var(--bg2);border-radius:var(--radius-sm);padding:14px;margin-bottom:10px}
-  .saldo-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0}
-  .empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:14px}
   .filter-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
   .filter-btn{font-size:11px;padding:5px 12px;border-radius:20px;border:0.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer}
   .filter-btn.on{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+  .empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:14px}
   #loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;gap:14px}
   #loading.hidden{display:none}
   .spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
   #loading p{font-size:14px;color:var(--text2)}
-  #errore{position:fixed;inset:0;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;z-index:1000}
+  #pin-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:2000;flex-direction:column;align-items:center;justify-content:center;padding:40px 30px}
+  #errore{display:none;position:fixed;inset:0;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;z-index:1000}
   #errore.show{display:flex}
   .err-icon{font-size:48px;margin-bottom:16px}
   .err-title{font-size:20px;font-weight:700;margin-bottom:8px}
@@ -69,19 +68,20 @@
 </style>
 </head>
 <body>
-
 <div id="loading">
   <div class="spinner"></div>
-  <p id="loading-msg">Caricamento dati...</p>
+  <p id="loading-msg">Caricamento...</p>
 </div>
-<div id="pin-screen" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:2000;flex-direction:column;align-items:center;justify-content:center;padding:40px 30px">
+
+<div id="pin-screen">
   <div style="font-size:32px;margin-bottom:16px">🔐</div>
   <div style="font-size:22px;font-weight:700;margin-bottom:8px;color:var(--text)">Area riservata</div>
   <div style="font-size:14px;color:var(--text2);margin-bottom:32px">Inserisci il tuo PIN per accedere</div>
-  <input id="pin-input" type="password" inputmode="numeric" maxlength="6" placeholder="••••" style="text-align:center;font-size:28px;letter-spacing:8px;width:160px;margin-bottom:16px" onkeydown="if(event.key==='Enter')checkPin()">
-  <button onclick="checkPin()" style="background:var(--accent);color:var(--bg);border:none;border-radius:12px;padding:14px 40px;font-size:15px;font-weight:600;cursor:pointer;width:160px">Entra</button>
+  <input id="pin-input" type="password" inputmode="numeric" maxlength="6" placeholder="••••" style="text-align:center;font-size:28px;letter-spacing:8px;width:160px;margin-bottom:16px">
+  <button id="pin-btn" style="background:var(--accent);color:var(--bg);border:none;border-radius:12px;padding:14px 40px;font-size:15px;font-weight:600;cursor:pointer;width:160px">Entra</button>
   <div id="pin-error" style="display:none;color:var(--danger);font-size:13px;margin-top:14px">PIN non corretto</div>
 </div>
+
 <div id="errore">
   <div class="err-icon">🔒</div>
   <div class="err-title">Link non valido</div>
@@ -95,7 +95,7 @@
     <div id="s-simulazione" class="screen"></div>
   </div>
   <nav class="nav">
- <button onclick="showTab('fatture')" id="nb-fatture" class="active">
+    <button onclick="showTab('fatture')" id="nb-fatture" class="active">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
       Fatture
     </button>
@@ -109,19 +109,20 @@
     </button>
   </nav>
 </div>
-
-<script>
+  <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxOTM4PntE9fLuyv7eHugZFZ7zyCXz-iXt8GV_yJBafVmgkdpSNfIkH1yMRkdPsQg/exec';
+
 const PIN_CLIENTI = {
   'CL001': '1221',
-  'CL002': '2112',
-  'CL003': '3223',
-  'CL004': '4567',
-  'CL005': '5432',
-  'CL006': '6667',
-  'CL007': '7227',
-  'CL008': '8118',
-};  
+  'CL002': '2222',
+  'CL003': '3333',
+  'CL004': '4444',
+  'CL005': '5555',
+  'CL006': '6666',
+  'CL007': '7777',
+  'CL008': '8888',
+};
+
 let CID = '';
 let CLIENTE = null;
 let FATTURE = [];
@@ -138,52 +139,43 @@ function parseDate(s) {
   return 0;
 }
 
-function normalizzaCliente(c) {
-  return { id:c['ID Cliente']||c.id||'', nome:c['Ragione Sociale']||c.nome||'', piva:String(c['P.IVA / CF']||c.piva||''), indirizzo:c['Indirizzo']||c.indirizzo||'', email:c['Email']||c.email||'' };
-}
 function normalizzaFattura(f) {
   const stato = (f['Stato']||f.stato||'').replace(/[✅⚠️🔴🔵]/g,'').trim().replace('NOTA CREDITO','CREDITO').trim();
-  return { n:f['N° Fattura']||f.n||'', data:f['Data Fattura']||f.data||'', cid:f['ID Cliente']||f.cid||'', tot:parseFloat(f['Totale (€)']||f.tot)||0, pagato:parseFloat(f['Pagato (€)']||f.pagato)||0, residuo:parseFloat(f['Residuo (€)']||f.residuo)||0, stato:stato||'APERTA', s30:f['Scad. 30gg FM']||f.s30||'', s60:f['Scad. 60gg FM']||f.s60||'' };
+  return {
+    n:       f['N° Fattura']   || f.n    || '',
+    data:    f['Data Fattura'] || f.data || '',
+    cid:     f['ID Cliente']   || f.cid  || '',
+    tot:     parseFloat(f['Totale (€)']  || f.tot)     || 0,
+    pagato:  parseFloat(f['Pagato (€)']  || f.pagato)  || 0,
+    residuo: parseFloat(f['Residuo (€)'] || f.residuo) || 0,
+    stato:   stato || 'APERTA',
+    s30:     f['Scad. 30gg FM'] || f.s30 || '',
+    s60:     f['Scad. 60gg FM'] || f.s60 || '',
+  };
 }
+
 function normalizzaPagamento(p) {
-  return { id:p['ID Pagamento']||p.id||'', data:p['Data Pagamento']||p.data||'', cid:p['ID Cliente']||p.cid||'', importo:parseFloat(p['Importo (€)']||p.importo)||0, modo:p['Modalità']||p.modo||'' };
+  return {
+    id:      p['ID Pagamento']   || p.id      || '',
+    data:    p['Data Pagamento'] || p.data    || '',
+    cid:     p['ID Cliente']     || p.cid     || '',
+    importo: parseFloat(p['Importo (€)'] || p.importo) || 0,
+    modo:    p['Modalità']       || p.modo    || '',
+  };
+}
+
+function normalizzaCliente(c) {
+  return {
+    id:   c['ID Cliente']      || c.id   || '',
+    nome: c['Ragione Sociale'] || c.nome || '',
+  };
 }
 
 function badgeClass(s) {
-  if (s==='SALDATA') return 'badge-saldata';
+  if (s==='SALDATA')  return 'badge-saldata';
   if (s==='PARZIALE') return 'badge-parziale';
-  if (s==='CREDITO') return 'badge-credito';
+  if (s==='CREDITO')  return 'badge-credito';
   return 'badge-aperta';
-}
-
-async function init() {
-  const params = new URLSearchParams(window.location.search);
-  CID = (params.get('cliente') || '').toUpperCase().trim();
-  if (!CID) { showErrore(); return; }
-  if (!SCRIPT_URL) { showErrore(); return; }
-  try {
-    document.getElementById('loading-msg').textContent = 'Caricamento dati...';
-    const res = await fetch(SCRIPT_URL + '?action=getAllData');
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    const tutti = (data.clienti||[]).map(normalizzaCliente);
-    CLIENTE = tutti.find(c => c.id.toUpperCase() === CID);
-    if (!CLIENTE) { showErrore(); return; }
-    FATTURE = (data.fatture||[]).map(normalizzaFattura).filter(f => f.cid.toUpperCase() === CID);
-    console.log('PAGAMENTI RAW:', JSON.stringify(data.pagamenti && data.pagamenti[0]));
-PAGAMENTI = (data.pagamenti||[]).map(normalizzaPagamento).filter(p => p.cid.toUpperCase() === CID);
-console.log('PAGAMENTI FILTRATI:', PAGAMENTI.length);
-    document.getElementById('loading').classList.add('hidden');
-    document.getElementById('app').style.display = 'flex';
-    renderFatture();
-  } catch(e) {
-    showErrore();
-  }
-}
-
-function showErrore() {
-  document.getElementById('loading').classList.add('hidden');
-  document.getElementById('errore').classList.add('show');
 }
 
 function showTab(tab) {
@@ -195,14 +187,42 @@ function showTab(tab) {
   if (renders[tab]) renders[tab]();
 }
 
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  CID = (params.get('cliente') || '').toUpperCase().trim();
+  if (!CID) { mostraErrore(); return; }
+  try {
+    document.getElementById('loading-msg').textContent = 'Caricamento dati...';
+    document.getElementById('loading').classList.remove('hidden');
+    const res = await fetch(SCRIPT_URL + '?action=getAllData');
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    const tuttiClienti = (data.clienti||[]).map(normalizzaCliente);
+    CLIENTE = tuttiClienti.find(c => c.id.toUpperCase() === CID);
+    if (!CLIENTE) { mostraErrore(); return; }
+    FATTURE = (data.fatture||[]).map(normalizzaFattura).filter(f => f.cid.toUpperCase() === CID);
+    PAGAMENTI = (data.pagamenti||[]).map(normalizzaPagamento).filter(p => p.cid.toUpperCase() === CID);
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('app').style.display = 'flex';
+    renderFatture();
+  } catch(e) {
+    mostraErrore();
+  }
+}
+
+function mostraErrore() {
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('errore').classList.add('show');
+}
+
 function renderFatture() {
   const stati = ['TUTTI','APERTA','PARZIALE','SALDATA','CREDITO'];
-  let h = `<div style="font-size:22px;font-weight:700;margin-bottom:12px">Fatture</div>`;
+  let h = `<div style="font-size:22px;font-weight:700;margin-bottom:12px">${CLIENTE ? CLIENTE.nome : ''}</div>`;
   h += `<div class="filter-row">`;
   stati.forEach(s => h += `<button class="filter-btn ${filterStato===s?'on':''}" onclick="setFilter('${s}')">${s}</button>`);
   h += `</div>`;
   let fat = [...FATTURE].sort((a,b) => parseDate(b.data)-parseDate(a.data));
-  if (filterStato!=='TUTTI') fat = fat.filter(f=>f.stato===filterStato);
+  if (filterStato!=='TUTTI') fat = fat.filter(f => f.stato===filterStato);
   if (!fat.length) { h += `<div class="empty">Nessuna fattura trovata</div>`; document.getElementById('s-fatture').innerHTML=h; return; }
   h += `<div class="card" style="padding:8px 14px">`;
   fat.forEach(f => {
@@ -210,14 +230,13 @@ function renderFatture() {
     const resAmt = f.stato==='CREDITO'?f.tot:f.residuo;
     h += `<div class="fat-row">`;
     h += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px"><span style="font-size:13px;font-weight:600">${f.n}</span><span class="badge ${badgeClass(f.stato)}">${f.stato}</span></div>`;
-    h += `<div style="display:flex;justify-content:space-between;align-items:center">`;
-    h += `<span style="font-size:11px;color:var(--text3)">${f.data} · scad. ${f.s60||'-'}</span>`;
-    h += `<span style="font-size:13px;font-weight:600;color:${resColor}">${fmt(resAmt)}</span>`;
-    h += `</div></div>`;
+    h += `<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;color:var(--text3)">${f.data} · scad. ${f.s60||'-'}</span><span style="font-size:13px;font-weight:600;color:${resColor}">${fmt(resAmt)}</span></div>`;
+    h += `</div>`;
   });
   h += `</div>`;
   document.getElementById('s-fatture').innerHTML = h;
 }
+
 function setFilter(s) { filterStato=s; renderFatture(); }
 
 function renderPagamenti() {
@@ -299,41 +318,42 @@ function calcolaSimulazione() {
   h+=`</div>`;
   resultEl.innerHTML=h;
 }
+    // PIN check
+document.addEventListener('DOMContentLoaded', function() {
+  const params = new URLSearchParams(window.location.search);
+  const cidPre = (params.get('cliente') || '').toUpperCase().trim();
 
-function checkPin() {
-  const pin = document.getElementById('pin-input').value.trim();
-  const params2 = new URLSearchParams(window.location.search);
-  const cidAttuale = (params2.get('cliente') || '').toUpperCase().trim();
-  const pinCorretto = PIN_CLIENTI[cidAttuale] || '0000';
-  if (pin === pinCorretto) {
-    localStorage.setItem('fifo_pin_ok_' + cidAttuale, '1');
-    document.getElementById('pin-screen').style.display = 'none';
+  if (!cidPre) {
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('errore').classList.add('show');
+    return;
+  }
+
+  if (localStorage.getItem('fifo_pin_ok_' + cidPre) === '1') {
     init();
   } else {
-    document.getElementById('pin-error').style.display = 'block';
-    document.getElementById('pin-input').value = '';
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('pin-screen').style.display = 'flex';
   }
-}
-}
-  if (pin === pinCorretto) {
-    localStorage.setItem('fifo_pin_ok_' + CID, '1');
-    document.getElementById('pin-screen').style.display = 'none';
-    init();
-  } else {
-    document.getElementById('pin-error').style.display = 'block';
-    document.getElementById('pin-input').value = '';
-  }
-}
 
-const params = new URLSearchParams(window.location.search);
-const CID_PRE = (params.get('cliente') || '').toUpperCase().trim();
+  document.getElementById('pin-btn').addEventListener('click', function() {
+    const pin = document.getElementById('pin-input').value.trim();
+    const pinCorretto = PIN_CLIENTI[cidPre] || '0000';
+    if (pin === pinCorretto) {
+      localStorage.setItem('fifo_pin_ok_' + cidPre, '1');
+      document.getElementById('pin-screen').style.display = 'none';
+      init();
+    } else {
+      document.getElementById('pin-error').style.display = 'block';
+      document.getElementById('pin-input').value = '';
+    }
+  });
 
-if (localStorage.getItem('fifo_pin_ok_' + CID_PRE) === '1') {
-  init();
-} else {
-  document.getElementById('loading').classList.add('hidden');
-  document.getElementById('pin-screen').style.display = 'flex';
-}
+  document.getElementById('pin-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('pin-btn').click();
+  });
+});
 </script>
 </body>
 </html>
+
